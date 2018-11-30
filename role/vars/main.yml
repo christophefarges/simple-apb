@@ -1,0 +1,8 @@
+---
+# vars file for simple-apb
+
+state_map:
+  provision: present
+  update: present
+  deprovision: absent
+state: "{{ state_map[apb_action] }}"

@@ -1,0 +1,24 @@
+# vim: set filetype=yaml shiftwidth=2 tabstop=2 expandtab shiftwidth :
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: simple-python-app
+  name: simple-python-app
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'simple-python-app:latest'
+  source:
+    git:
+      uri: https://github.com/christophefarges/flask-prometheus-ex
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'python:3.6'
+        namespace: openshift
+    type: Source

@@ -1,0 +1,27 @@
+version: 1.0
+name: simple-apb
+description: your description
+bindable: False
+async: optional
+metadata:
+  displayName: simple-apb
+plans:
+  - name: default
+    description: This default plan deploys simple-apb
+    updates_to:
+    - default
+    free: True
+    metadata: {}
+    parameters: 
+      - name: enable_monitoring
+        type: boolean
+        default: false
+        required: false
+        title: "Enable Prometheus monitoring"
+      - name: monitoring_namespace
+        type: string
+        updatetable: true
+        title: "Application monitoring namespace"
+        description: ""
+        default: app-monitoring
+        required: false

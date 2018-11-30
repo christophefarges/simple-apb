@@ -1,0 +1,40 @@
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: {{ app_name }}
+  name: {{ app_name }}
+  namespace: {{ namespace | string }}
+spec:
+  replicas: 1
+  selector:
+    app: {{ app_name }}
+    deploymentconfig: {{ app_name }}
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:        
+        app: {{ app_name }}
+        deploymentconfig: {{ app_name }}
+    spec:
+      containers:
+        - image: >-
+            docker-registry.default.svc:5000/simple-apb/simple-python-app
+          imagePullPolicy: Always
+          name: {{ app_name }}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - {{ app_name }}
+        from:
+          kind: ImageStreamTag
+          name: 'simple-python-app:latest'
+          namespace: simple-apb
+      type: ImageChange

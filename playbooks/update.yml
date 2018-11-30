@@ -1,0 +1,9 @@
+- name: simple-apb playbook to update the application
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    apb_action: update
+  roles:
+  - role: simple-apb
+    

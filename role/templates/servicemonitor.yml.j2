@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ namespace }}-app-scraper
+  namespace: {{ monitoring_namespace }}
+  labels:
+    k8s-app: prometheus
+spec:
+  endpoints:
+    - interval: 30s
+      port: 8080-tcp
+  namespaceSelector:
+    matchNames:
+      - "{{ namespace }}"
+  selector:
+    matchLabels:
+      app-monitoring: scrape-me

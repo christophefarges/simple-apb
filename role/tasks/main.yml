@@ -1,0 +1,25 @@
+---
+- name: 'Set facts'
+  set_fact:
+    cluster: '{{ "openshift" if "openshift" in lookup("k8s", cluster_info="version") else "kubernetes" }}'
+    uniqname: '{{ _apb_service_instance_id.split("-")[0] | lower }}'
+
+- name: "Set flask-prometheus-ex objects state={{ state }}"
+  k8s:
+    state: "{{ state }}"
+    definition: "{{ lookup('template', item.name) | from_yaml }}"
+  when: item.apply | default(True)
+  loop:
+    - name: deploymentconfig.yml.j2
+    - name: service.yml.j2
+    - name: route.yml.j2
+
+- name: Set monitoring object state={{ state }}
+  k8s:
+    state: "{{ state }}"
+    definition: "{{ lookup('template', item.name) | from_yaml }}" 
+  when: enable_monitoring
+  loop:
+    - name: monitoring-role.yml.j2
+    - name: monitoring-rolebinding.yml.j2
+    - name: servicemonitor.yml.j2
